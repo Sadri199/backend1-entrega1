@@ -1,0 +1,30 @@
+{
+    "games": [
+        {
+            "title": "Granddad 7",
+            "description": "Flintstones",
+            "code": "BTLG-1",
+            "price": 500,
+            "status": true,
+            "stock": 5000000,
+            "category": "Platformer",
+            "thumbnail": [
+                "https://i.kym-cdn.com/entries/icons/original/000/020/037/7_Grand_Dad_Banner.jpg"
+            ],
+            "id": 882779
+        },
+        {
+            "title": "Granddad 7",
+            "description": "Flintstones",
+            "code": "BTLG-1",
+            "price": 500,
+            "status": true,
+            "stock": 5000000,
+            "category": "Platformer",
+            "thumbnail": [
+                "https://i.kym-cdn.com/entries/icons/original/000/020/037/7_Grand_Dad_Banner.jpg"
+            ],
+            "id": 1393511
+        }
+    ]
+}
