@@ -28,7 +28,7 @@ export class ProductManager {
             console.log("products.json created or edited!")
         } catch (err){
             console.log("Something went wrong creating or updating the file: " + err)
-            return "Internal Server Error, please try again later."
+            return "Internal Server Error, we couldn't add that product."
         }
     }
 
@@ -40,7 +40,7 @@ export class ProductManager {
             return convertJson
         } catch (err){
             console.log("Something went wrong reading the file: " + err)
-            return "Internal Server Error, please try again later."
+            return "Internal Server Error, we couldn't retrieve the Database."
         }
     }
 
@@ -56,23 +56,48 @@ export class ProductManager {
             }
         }catch (err){
             console.log("Something went wrong while retrieving the file: " + err)
-            return "Internal Server Error, please try again later."
+            return "Internal Server Error, we couldn't retrieve that product."
         }
     }
 
-    async updateProduct (id, data){
+    async updateProduct (idGame, data){
         try{
-            const allProducts = getProduct()
+            const allProducts = await this.getProduct()
             const arrayGames = allProducts.games
-            const filteredGame = arrayGames. filter(game => game.id == id)
-            for (let i = 0; i < filteredGame.length; i++){
-                const currentGame = filteredGame[i]
-            }
-            //me quedé acá
-            
+            const oldProduct = arrayGames.filter(game => game.id == idGame)
+            const popProduct = oldProduct.pop()
+
+            const {id, ...rest} = data
+            const updatedProduct = {...popProduct, ...rest}
+
+            arrayGames.splice(arrayGames.findIndex(game => game.id == idGame), 1)
+            arrayGames.push(updatedProduct)
+
+            const stringify = JSON.stringify(allProducts)
+            const addJson = await fs.writeFile("./db/products.json", stringify)
+            console.log("products.json edited succesfully!")
+            return `Game with id ${idGame} updated correctly!`
         }catch(err){
             console.log("Something went wrong while editing the file: " + err)
-            return "Internal Server Error, please try again later."
+            return "Internal Server Error, we couldn't edit the product."
+        }
+    }
+
+    async deleteProduct (id){
+        try{
+            const getJson = await fs.readFile("./db/products.json", {encoding: "utf8"})
+            console.log("Reading file...")
+            const convertJson = JSON.parse(getJson)
+            const arrayGames = convertJson.games
+            arrayGames.splice(arrayGames.findIndex(game => game.id == id), 1)
+
+            const stringify = JSON.stringify(convertJson)
+            const addJson = await fs.writeFile("./db/products.json", stringify)
+            console.log("products.json edited succesfully!")
+            return `Game with id ${id} removed correctly!`
+        }catch(err){
+            console.log("Something went wrong while removing the product: " + err)
+            return "Internal Server Error, we couldn't delete that product."
         }
     }
 }
