@@ -105,10 +105,27 @@ app.post("/api/carts", (req,res) => {
         })
 })
 
-app.get("/api/carts", (req, res)=>{
-    const id = req.params.pid //me quede por acá
-    const readJson = newCartManager
-    readJson
+app.get("/api/carts/:cid", (req, res)=>{
+    const id = req.params.cid
+    const cartGet = newCartManager.getCart(id)
+    cartGet
+        .then((data) =>{
+            res.status(200)
+            res.send(data)
+        })
+        .catch((data)=> {
+            res.status(500)
+            res.send(data)
+        })
+})
+
+app.post("/api/carts/:cid/product/:pid", (req, res)=>{
+    const cid = req.params.cid
+    const pid = req.params.pid
+    const quantity = req.body.quantity
+
+    const productAdd = newCartManager.addToCart(cid, pid, quantity)
+    productAdd
         .then((data) =>{
             res.status(200)
             res.send(data)
