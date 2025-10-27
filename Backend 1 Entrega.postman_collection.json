@@ -59,7 +59,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"Sonic 5\",\r\n    \"description\": \"Like Sonic 3 but better\",\r\n    \"code\": \"BTLG-2\",\r\n    \"price\": 400,\r\n    \"status\": true,\r\n    \"stock\": 654,\r\n    \"category\": \"Platformer\",\r\n    \"thumbnail\": [\r\n        \"https://vignette2.wikia.nocookie.net/bootleggames/images/e/ec/Bonio-sonic5.jpg/revision/latest?cb=20100821084722\"\r\n    ]\r\n}",
+							"raw": "{\r\n    \"title\": \"Sonic 9\",\r\n    \"description\": \"Like Sonic 3 but 3 times better\",\r\n    \"code\": \"BTLG-9\",\r\n    \"price\": 100,\r\n    \"status\": true,\r\n    \"stock\": 3,\r\n    \"category\": \"Platformer\",\r\n    \"thumbnail\": [\r\n        \"https://vignette2.wikia.nocookie.net/bootleggames/images/e/ec/Bonio-sonic5.jpg/revision/latest?cb=20100821084722\"\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -67,9 +67,14 @@
 							}
 						},
 						"url": {
-							"raw": "Create Product",
+							"raw": "localhost:8080/api/products",
 							"host": [
-								"Create Product"
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products"
 							]
 						}
 					},

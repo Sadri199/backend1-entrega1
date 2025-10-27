@@ -1,7 +1,7 @@
 # Backend 1 - Entrega 1
 
 A simple backend application built with **Node.js** and **Express** for Coderhouse's course.
-This project serves as a boilerplate for building RESTful APIs.
+This project serves as a boilerplate for building RESTful APIs, it has 2 routes, one for Products and one for Carts; Products has full CRUD (Create, Read, Update, Delete) and Carts only has Create and Read (partially).
 
 ---
 
@@ -22,13 +22,13 @@ This project serves as a boilerplate for building RESTful APIs.
 
 ### Install dependencies
 
-- `npm install`
+- `npm install` in the terminal.
 
 ---
 
 ## 👾 Execution
 
-- `node main.js`
+- `node main.js` in the terminal.
 
 ---
 
