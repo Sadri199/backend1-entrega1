@@ -28,7 +28,7 @@ This project serves as a boilerplate for building RESTful APIs, it has 2 routes,
 
 ## 👾 Execution
 
-- `node main.js` in the terminal.
+- `node main.js` in the terminal or `npm run dev`
 
 ---
 
