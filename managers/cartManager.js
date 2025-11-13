@@ -1,7 +1,7 @@
 import fs from "fs/promises"
 
 export class CartManager {
-    constructor(products){
+    constructor(products=[{product:1,quantity:26}]){
         this.id = Math.floor(Math.random() * (5000000 - 100) + 100)
         this.products=[products]
     }
@@ -20,9 +20,10 @@ export class CartManager {
             return data.id
         }catch(err){
             console.log("Something went wrong creating or updating the file: " + err)
-            return "Internal Server Error, we couldn't create your cart."
+            throw new Error ("Internal Server Error, we couldn't retrieve your cart.")
         }
     }
+    
     async getCart(cid){
         try{
             const getJson = await fs.readFile("./db/carts.json", {encoding: "utf8"})
@@ -31,14 +32,14 @@ export class CartManager {
             const arrayCarts = convertJson.carts
             const filteredCart = arrayCarts.filter(cart => cart.id == cid)
             if(filteredCart.length == 0){
-                return "Not a valid Cart ID."
+                throw new Error ("Not a valid Cart ID!")
             }
             for (let i = 0; i < filteredCart.length; i++){
                 return filteredCart[i]
             }
         }catch (err){
                 console.log("Something went wrong while retrieving the file: " + err)
-                return "Internal Server Error, we couldn't retrieve your cart."
+                throw err.message
         }
     }
 
@@ -60,9 +61,6 @@ export class CartManager {
                 const oldProduct = popCart.products.filter(a => a.product == pid).pop()
                 oldProduct.quantity = newProduct.quantity
                 const updatedProduct = {...popCart.products, ...oldProduct}
-                
-                console.log(updatedProduct)
-                //popCart.products = [newProduct]
             } else {
                 popCart.products.push(newProduct)
             }
@@ -76,7 +74,7 @@ export class CartManager {
             return `The Product ${pid} was added or modified to the Cart ${cid} !`
         }catch(err){
             console.log("Something went wrong while retrieving the file: " + err)
-            throw new Error("Not a valid Cart ID!")
+            throw err.message
         }
     }
 }

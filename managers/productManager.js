@@ -28,7 +28,7 @@ export class ProductManager {
             console.log("products.json created or edited!")
         } catch (err){
             console.log("Something went wrong creating or updating the file: " + err)
-            return "Internal Server Error, we couldn't add that product."
+            throw new Error ("Internal Server Error, we couldn't add that product.") 
         }
     }
 
@@ -39,8 +39,9 @@ export class ProductManager {
             const convertJson = JSON.parse(getJson)
             return convertJson
         } catch (err){
+            err.message = "Internal Server Error, we couldn't retrieve the Database."
             console.log("Something went wrong reading the file: " + err)
-            return "Internal Server Error, we couldn't retrieve the Database."
+            throw err
         }
     }
 
@@ -51,12 +52,15 @@ export class ProductManager {
             const convertJson = JSON.parse(getJson)
             const arrayGames = convertJson.games
             const filteredGame = arrayGames. filter(game => game.id == id)
+            if(filteredGame.length == 0){
+                throw new Error ("Not a valid Cart ID!")
+            }
             for (let i = 0; i < filteredGame.length; i++){
                 return filteredGame[i]
             }
         }catch (err){
             console.log("Something went wrong while retrieving the file: " + err)
-            return "Internal Server Error, we couldn't retrieve that product."
+            throw err 
         }
     }
 
@@ -65,6 +69,9 @@ export class ProductManager {
             const allProducts = await this.getProduct()
             const arrayGames = allProducts.games
             const oldProduct = arrayGames.filter(game => game.id == idGame)
+            if(oldProduct.length == 0){
+                throw new Error ("Not a valid Cart ID!")
+            }
             const popProduct = oldProduct.pop()
 
             const {id, ...rest} = data
@@ -79,7 +86,7 @@ export class ProductManager {
             return `Game with id ${idGame} updated correctly!`
         }catch(err){
             console.log("Something went wrong while editing the file: " + err)
-            return "Internal Server Error, we couldn't edit the product."
+            throw err
         }
     }
 
@@ -89,7 +96,11 @@ export class ProductManager {
             console.log("Reading file...")
             const convertJson = JSON.parse(getJson)
             const arrayGames = convertJson.games
-            arrayGames.splice(arrayGames.findIndex(game => game.id == id), 1)
+            const findId = arrayGames.findIndex(game => game.id == id)
+            if(findId == -1){
+                throw new Error ("Not a valid ID!")
+            }
+            arrayGames.splice(findId, 1)
 
             const stringify = JSON.stringify(convertJson)
             const addJson = await fs.writeFile("./db/products.json", stringify)
@@ -97,7 +108,7 @@ export class ProductManager {
             return `Game with id ${id} removed correctly!`
         }catch(err){
             console.log("Something went wrong while removing the product: " + err)
-            return "Internal Server Error, we couldn't delete that product."
+            throw err
         }
     }
 }
