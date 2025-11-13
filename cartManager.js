@@ -50,33 +50,33 @@ export class CartManager {
             const arrayCarts = convertJson.carts
             const filteredCart = arrayCarts.filter(cart => cart.id == cid)
             if(filteredCart.length == 0){
-                return "Not a valid Cart ID."
+                throw new Error("Not a valid Cart ID.")
             }
             const popCart = filteredCart.pop()
-            console.log(popCart)
 
             const newProduct = {product: pid, quantity: quantity}
             const validator = popCart.products.some(a => a.product == pid)
-            console.log(validator)
             if (validator){
-                console.log("validator fue true")
-                popCart.products = [newProduct]
+                const oldProduct = popCart.products.filter(a => a.product == pid).pop()
+                oldProduct.quantity = newProduct.quantity
+                const updatedProduct = {...popCart.products, ...oldProduct}
+                
+                console.log(updatedProduct)
+                //popCart.products = [newProduct]
             } else {
-                console.log("validator fue false")
                 popCart.products.push(newProduct)
             }
             
             arrayCarts.splice(arrayCarts.findIndex(cart => cart.id == cid), 1)
             arrayCarts.push(popCart)
-            console.log(arrayCarts)
 
             const stringify = JSON.stringify(convertJson)
             const addJson = await fs.writeFile("./db/carts.json", stringify)
             console.log("carts.json edited!")
-            return `The Product ${pid} was added to the Cart ${cid} !`
+            return `The Product ${pid} was added or modified to the Cart ${cid} !`
         }catch(err){
             console.log("Something went wrong while retrieving the file: " + err)
-            return "Internal Server Error, we couldn't add the product to your cart."
+            throw new Error("Not a valid Cart ID!")
         }
     }
 }

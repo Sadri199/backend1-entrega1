@@ -2,15 +2,17 @@ import express from "express"
 import { ProductManager } from "./productManager.js"
 import { CartManager } from "./cartManager.js"
 
+//Main Configurations
 const app = express()
-const newManager = new ProductManager()
-const newCartManager = new CartManager()
-
 const PORT = 8080
 
 app.use(express.json())
 
+const newCartManager = new CartManager()
+
+//Products Endpoints
 app.get("/api/products", (req, res)=> {
+    const newManager = new ProductManager()
     const readJson = newManager.getProduct()
     readJson
         .then((data) =>{
@@ -35,7 +37,9 @@ app.post("/api/products", (req, res)=> {
         category: req.body.category,
         thumbnail: req.body.thumbnail
     }
-    const createProduct = newManager.addProduct(newProduct)
+
+    const newManager = new ProductManager(newProduct)
+    const createProduct = newManager.addProduct(newManager)
     createProduct
         .then(()=> {
             res.status(200)
@@ -49,6 +53,7 @@ app.post("/api/products", (req, res)=> {
 
 app.get("/api/products/:pid", (req, res)=> {
     const id = req.params.pid
+    const newManager = new ProductManager()
     const readJson = newManager.getProductByID(id)
     readJson
         .then((data) =>{
@@ -64,6 +69,7 @@ app.get("/api/products/:pid", (req, res)=> {
 app.put("/api/products/:pid", (req, res)=> {
     const id = req.params.pid
     const productData = req.body
+    const newManager = new ProductManager()
     const productUpdate = newManager.updateProduct(id, productData)
     productUpdate
         .then((data) => {
@@ -77,6 +83,7 @@ app.put("/api/products/:pid", (req, res)=> {
 
 app.delete("/api/products/:pid", (req, res) => {
     const id = req.params.pid
+    const newManager = new ProductManager()
     const productDelete = newManager.deleteProduct(id)
     productDelete
         .then((data) => {
@@ -88,6 +95,7 @@ app.delete("/api/products/:pid", (req, res) => {
         })
 })
 
+//Carts Endpoints
 app.post("/api/carts", (req,res) => {
     const newCart = {
         products:  req.body.products,
@@ -128,11 +136,11 @@ app.post("/api/carts/:cid/product/:pid", (req, res)=>{
     productAdd
         .then((data) =>{
             res.status(200)
-            res.send(data)
+            res.send({Message: data})
         })
-        .catch((data)=> {
+        .catch((err)=> {
             res.status(500)
-            res.send(data)
+            res.send({Error: err.message})
         })
 })
 

@@ -7,7 +7,7 @@
   "type": "module",
   "main": "main.js",
   "scripts": {
-    "dev": "node main.js"
+    "dev": "node --watch main.js"
   },
   "dependencies": {
     "express": "^5.1.0"
