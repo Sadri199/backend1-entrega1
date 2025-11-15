@@ -18,9 +18,14 @@ const wsServer = new Server(httpServer)
 wsServer.on("connection", (socket)=> {
     const clientId = socket.id
     console.log(`New client connected! Client: ${clientId}`)
+    socket.emit("connection", "Connected to the server.")
     
     socket.on("message", ()=>{
         socket.emit("response", `Yes client ${clientId}, you are connected.`)
+    })
+
+    socket.on("products", ()=>{
+        socket.emit("giveProducts", "Here is the information!")
     })
 })
 
